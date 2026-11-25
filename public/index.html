@@ -88,52 +88,124 @@ body { isolation: isolate; min-height: 100vh; }
 .scene-decor .tomato { left: 11%; top: 44%; rotate: -14deg; width: clamp(58px, 8vw, 112px); }
 .scene-decor .hotpot { left: 5%; bottom: 5%; rotate: -12deg; }
 .scene-decor .egg { right: 12%; bottom: 6%; rotate: 15deg; width: clamp(58px, 9vw, 125px); }
-body:has(#lobby:not([style*="display: none"])) main > header { display: none; }
+
+body:has(#lobby:not([style*="display: none"])) {
+  background: #fff0bc;
+}
+main:has(#lobby:not([style*="display: none"])) {
+  max-width: none;
+  padding: 0;
+  overflow: hidden;
+}
+main:has(#lobby:not([style*="display: none"])) > :is(header, footer),
+body:has(#lobby:not([style*="display: none"])) .scene-decor { display: none; }
 #lobby {
-  width: min(100%, 470px);
-  margin: clamp(24px, 7vh, 76px) auto 36px;
-  padding: 0 clamp(18px, 5vw, 42px);
-  background: none;
+  /* Keep the reference artwork proportional and center its form on narrow screens. */
+  position: relative;
+  left: 50%;
+  width: clamp(452px, min(100vw, 104svh), 1100px);
+  max-width: none;
+  aspect-ratio: 1278 / 1231;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0;
   border: 0;
   box-shadow: none;
+  background: url("/lobby-reference.png") center / 100% 100% no-repeat;
+  container-type: inline-size;
 }
-#lobby h1 { margin: 0 0 4px; }
-#lobby .logo-art { max-height: none; object-position: center; }
-#lobby p { margin: 8px 0 18px; }
-#lobby #msg { min-height: 1.5em; margin: 14px 0 0; }
-#lobby hr { margin: 14px 0; }
+#lobbyLogo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.lobby-controls {
+  /* Cover the reference's drawn controls with the working form. */
+  position: absolute;
+  inset: 40.8% 17.5% 24.2% 17.1%;
+  padding: 1cqw .15cqw 0;
+  background: radial-gradient(ellipse at 52% 48%, #fbf7eb, #fbf6e8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(3px, .7cqw, 8px);
+}
+#lobby input {
+  flex: none;
+  height: clamp(34px, 6.6cqw, 73px);
+  margin: 0;
+  padding: 0 1.8cqw;
+  border-radius: clamp(11px, 2cqw, 24px);
+  color: #593c27;
+  font-size: clamp(14px, 2.45cqw, 27px);
+  background: #fcfaf2;
+}
+#lobby hr { width: 100%; margin: .3cqw 0; }
+#lobby #msg {
+  width: 100%;
+  margin: 3px 0 0;
+  color: #713918;
+  font-size: clamp(12px, 1.55cqw, 17px);
+}
+#lobby #msg:empty { display: none; }
 #lobby .bread-button {
-  --crust: #bd783c;
-  --bread: #ffe9ad;
-  --crumb: #fff2c7;
+  --crust: #ac6631;
+  --crumb: #fff0bf;
+  --bread: #f6cf80;
+  --slice: shape(from 9% 42%,
+    curve to 2% 32% with 5% 41% / 2% 38%,
+    curve to 26% 6% with 2% 19% / 12% 8%,
+    curve to 74% 6% with 39% 2% / 61% 2%,
+    curve to 98% 32% with 88% 8% / 98% 19%,
+    curve to 91% 42% with 98% 38% / 95% 41%,
+    line to 91% 84%,
+    curve to 80% 96% with 91% 92% / 86% 96%,
+    line to 20% 96%,
+    curve to 9% 84% with 14% 96% / 9% 92%, close);
   position: relative;
-  width: min(100%, 252px);
-  min-height: 70px;
-  margin: 8px 0;
-  padding: 17px 16px 12px;
-  border: 5px solid var(--crust);
-  border-radius: 45% 45% 20% 20% / 53% 53% 24% 24%;
+  isolation: isolate;
+  flex: none;
+  width: clamp(106px, 13.5cqw, 150px);
+  height: clamp(44px, 6.8cqw, 75px);
+  margin: 0;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: #49270f;
+  font-size: clamp(13px, 1.8cqw, 20px);
+  filter: drop-shadow(0 2px 0 #8851265c);
+  transition: transform .12s ease;
+}
+#lobby .bread-button::before,
+#lobby .bread-button::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: 28% 28% 16% 16% / 42% 42% 21% 21%;
+  clip-path: var(--slice);
+}
+#lobby .bread-button::before { inset: 0; z-index: -2; background: var(--crust); }
+#lobby .bread-button::after {
+  inset: 3px 4px 4px;
+  z-index: -1;
   background:
-    radial-gradient(circle at 17% 47%, #9b52152e 1px, transparent 2px),
-    radial-gradient(circle at 81% 32%, #9b521533 1px, transparent 2px),
-    radial-gradient(circle at 75% 76%, #9b52152e 1px, transparent 2px),
-    radial-gradient(circle at 29% 77%, #9b521533 1px, transparent 2px),
-    radial-gradient(ellipse at 50% 29%, var(--crumb), var(--bread) 78%);
-  color: #47250f;
-  font-size: 1.2rem;
-  box-shadow: inset 0 3px #fff4d58c, inset 0 -4px #9b521530,
-              0 5px #a66330, 0 8px 12px #9e65353d;
-  transition: transform .12s ease, box-shadow .12s ease, border-color .15s ease;
+    radial-gradient(circle at 23% 28%, #8c471f3b 1px, transparent 1.7px),
+    radial-gradient(circle at 77% 56%, #8c471f38 1px, transparent 1.7px),
+    radial-gradient(circle at 28% 72%, #8c471f30 1px, transparent 1.7px),
+    radial-gradient(ellipse at 50% 25%, var(--crumb), var(--bread));
 }
 #lobby .bread-button:is(:hover, :focus-visible) {
-  --crust: #96501f;
-  --bread: #d78a3c;
-  --crumb: #f5c16c;
+  --crust: #844415;
+  --crumb: #ffd080;
+  --bread: #d9893b;
 }
-#lobby .bread-button:focus-visible { outline: 3px solid #60371e; outline-offset: 4px; }
-#lobby .bread-button:active {
-  transform: translateY(4px) scaleY(.95);
-  box-shadow: inset 0 3px #fff4d58c, inset 0 -4px #9b521530, 0 1px #a66330;
+#lobby .bread-button:focus-visible { outline: 2px solid #60371e; outline-offset: 2px; }
+#lobby .bread-button:active { transform: translateY(2px) scaleY(.96); }
+@media (max-width: 460px) {
+  #lobby { margin-top: max(0px, calc((100svh - 510px) / 2)); }
 }
 @media (max-width: 700px) {
   .scene-decor img { opacity: .45; }
@@ -145,13 +217,21 @@ body:has(#lobby:not([style*="display: none"])) main > header { display: none; }
 @media (prefers-reduced-motion: reduce) {
   #lobby .bread-button { transition: none; }
 }
-</style><div class="scene-decor" aria-hidden="true"></div><main><header><h1><span id="gameLogo" aria-label="우당탕 키친">우당탕 키친</span></h1><div id="hud"></div></header><section id="lobby" aria-labelledby="lobbyLogo"><h1 id="lobbyLogo">우당탕 키친</h1><p>최대 6명이 함께하는 협동 요리 게임</p><input id="nick" aria-label="닉네임" maxlength="12" placeholder="닉네임"><button id="create" class="bread-button">새 방 만들기</button><hr><input id="code" aria-label="친구의 방 코드" maxlength="5" placeholder="친구의 방 코드"><button id="join" class="bread-button">방 입장</button><p id="msg" role="status"></p></section><section id="game"><div id="stageControls" class="stage-controls"></div><div id="stageTitle" class="stage-title"></div><div class="layout"><div><div class="kitchen" id="board"></div><div id="players"></div><section class="chat-panel"><div class="chat-heading">💬 팀 채팅 <small>Enter로 입력 · Esc로 취소</small></div><div id="chatLog" role="log" aria-live="polite"></div><form id="chatForm"><input id="chatInput" maxlength="180" autocomplete="off" placeholder="Enter를 눌러 채팅하기"><button type="submit">전송</button></form></section><div class="hint">WASD / 방향키 이동 · E 집기 / 놓기 / 조리 / 서빙 · 가까운 조리대 E · Enter 채팅 · 좌클릭 ? 핑 · 우클릭 ! 핑</div></div><aside class="panel order-panel"><h2 class="order-banner" id="orderBanner">주문</h2><div id="orders"></div><p class="score-note">주문 완료 시 팀 점수 획득 · 시간 초과 시 최대 20점 차감</p><p id="stageHelp" class="stage-help"></p><button id="copy">방 코드 복사</button> <button id="exit">나가기</button></aside></div></section><footer class="build-version">v0.4.6</footer></main><script src="/kitchen-art.js?v=045"></script><script src="/order-banner.js"></script><script src="/socket.io/socket.io.js"></script><script>
+</style><div class="scene-decor" aria-hidden="true"></div><main><header><h1><span id="gameLogo" aria-label="우당탕 키친">우당탕 키친</span></h1><div id="hud"></div></header><section id="lobby" aria-labelledby="lobbyLogo">
+  <h1 id="lobbyLogo">우당탕 키친</h1>
+  <div class="lobby-controls">
+    <input id="nick" aria-label="닉네임" maxlength="12" placeholder="닉네임">
+    <button id="create" class="bread-button">새 방 만들기</button>
+    <hr>
+    <input id="code" aria-label="친구의 방 코드" maxlength="5" placeholder="친구의 방 코드">
+    <button id="join" class="bread-button">방 입장</button>
+    <p id="msg" role="status"></p>
+  </div>
+</section><section id="game"><div id="stageControls" class="stage-controls"></div><div id="stageTitle" class="stage-title"></div><div class="layout"><div><div class="kitchen" id="board"></div><div id="players"></div><section class="chat-panel"><div class="chat-heading">💬 팀 채팅 <small>Enter로 입력 · Esc로 취소</small></div><div id="chatLog" role="log" aria-live="polite"></div><form id="chatForm"><input id="chatInput" maxlength="180" autocomplete="off" placeholder="Enter를 눌러 채팅하기"><button type="submit">전송</button></form></section><div class="hint">WASD / 방향키 이동 · E 집기 / 놓기 / 조리 / 서빙 · 가까운 조리대 E · Enter 채팅 · 좌클릭 ? 핑 · 우클릭 ! 핑</div></div><aside class="panel order-panel"><h2 class="order-banner" id="orderBanner">주문</h2><div id="orders"></div><p class="score-note">주문 완료 시 팀 점수 획득 · 시간 초과 시 최대 20점 차감</p><p id="stageHelp" class="stage-help"></p><button id="copy">방 코드 복사</button> <button id="exit">나가기</button></aside></div></section><footer class="build-version">v0.4.6</footer></main><script src="/kitchen-art.js?v=045"></script><script src="/order-banner.js"></script><script src="/socket.io/socket.io.js"></script><script>
 
 if(window.ORDER_BANNER){const img=document.createElement('img');img.src=window.ORDER_BANNER;img.alt='주문';document.getElementById('orderBanner').replaceChildren(img)}const rasterURLs=Object.create(null);for(const [name,url] of Object.entries(window.KITCHEN_RASTER||{})){try{const bytes=Uint8Array.from(atob(url.split(',')[1]),v=>v.charCodeAt(0));rasterURLs[name]=URL.createObjectURL(new Blob([bytes],{type:'image/webp'}))}catch(e){console.warn('Kitchen image unavailable',name)}}
 const artImage=(key,cls='',alt='')=>rasterURLs[key]?'<img draggable="false" class="raster '+cls+'" alt="'+alt+'" src="'+rasterURLs[key]+'">':'';
-for(const id of ['gameLogo','lobbyLogo']){
-  document.getElementById(id).innerHTML=artImage('logo','logo-art','우당탕 키친')||'우당탕 키친';
-}
+document.getElementById('gameLogo').innerHTML=artImage('logo','logo-art','우당탕 키친')||'우당탕 키친';
 document.querySelector('.scene-decor').innerHTML=['stove','lettuce','chop','tomato','hotpot','egg']
   .map(key=>artImage(key,key)).join('');
 function dishArt(o){const n=o.name;return artImage(n.includes('마라탕')?'soup':n.includes('꼬치')?'skewer':n.includes('초밥')||n.includes('김말이')?'sushi':n.includes('샐러드')?'salad':n.includes('버거')||n.includes('샌드위치')?'burger':n.includes('덮밥')||n.includes('비빔밥')?'rice':'steak','dish-art',n)}
