@@ -152,58 +152,22 @@ body:has(#lobby:not([style*="display: none"])) .scene-decor { display: none; }
 }
 #lobby #msg:empty { display: none; }
 #lobby .bread-button {
-  --crust: #ac6631;
-  --crumb: #fff0bf;
-  --bread: #f6cf80;
-  --slice: shape(from 9% 42%,
-    curve to 2% 32% with 5% 41% / 2% 38%,
-    curve to 26% 6% with 2% 19% / 12% 8%,
-    curve to 74% 6% with 39% 2% / 61% 2%,
-    curve to 98% 32% with 88% 8% / 98% 19%,
-    curve to 91% 42% with 98% 38% / 95% 41%,
-    line to 91% 84%,
-    curve to 80% 96% with 91% 92% / 86% 96%,
-    line to 20% 96%,
-    curve to 9% 84% with 14% 96% / 9% 92%, close);
-  position: relative;
-  isolation: isolate;
+  --bread-row: 0%;
   flex: none;
-  width: clamp(106px, 13.5cqw, 150px);
-  height: clamp(44px, 6.8cqw, 75px);
+  width: clamp(132px, 18.5cqw, 212px);
+  height: clamp(50px, 8.2cqw, 90px);
   margin: 0;
-  padding: 0 10px;
+  padding: 0;
   border: 0;
-  background: transparent;
-  color: #49270f;
-  font-size: clamp(13px, 1.8cqw, 20px);
-  filter: drop-shadow(0 2px 0 #8851265c);
+  border-radius: 12px;
+  background: transparent url("/lobby-toast-buttons.png") 0% var(--bread-row) / 200% 200% no-repeat;
+  filter: drop-shadow(0 2px 0 #8851264d);
   transition: transform .12s ease;
 }
-#lobby .bread-button::before,
-#lobby .bread-button::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  border-radius: 28% 28% 16% 16% / 42% 42% 21% 21%;
-  clip-path: var(--slice);
-}
-#lobby .bread-button::before { inset: 0; z-index: -2; background: var(--crust); }
-#lobby .bread-button::after {
-  inset: 3px 4px 4px;
-  z-index: -1;
-  background:
-    radial-gradient(circle at 23% 28%, #8c471f3b 1px, transparent 1.7px),
-    radial-gradient(circle at 77% 56%, #8c471f38 1px, transparent 1.7px),
-    radial-gradient(circle at 28% 72%, #8c471f30 1px, transparent 1.7px),
-    radial-gradient(ellipse at 50% 25%, var(--crumb), var(--bread));
-}
-#lobby .bread-button:is(:hover, :focus-visible) {
-  --crust: #844415;
-  --crumb: #ffd080;
-  --bread: #d9893b;
-}
+#lobby #join { --bread-row: 100%; }
+#lobby .bread-button:is(:hover, :focus-visible) { background-position-x: 100%; }
 #lobby .bread-button:focus-visible { outline: 2px solid #60371e; outline-offset: 2px; }
-#lobby .bread-button:active { transform: translateY(2px) scaleY(.96); }
+#lobby .bread-button:active { transform: translateY(2px) scale(.98); }
 @media (max-width: 460px) {
   #lobby { margin-top: max(0px, calc((100svh - 510px) / 2)); }
 }
@@ -221,10 +185,10 @@ body:has(#lobby:not([style*="display: none"])) .scene-decor { display: none; }
   <h1 id="lobbyLogo">우당탕 키친</h1>
   <div class="lobby-controls">
     <input id="nick" aria-label="닉네임" maxlength="12" placeholder="닉네임">
-    <button id="create" class="bread-button">새 방 만들기</button>
+    <button id="create" class="bread-button" type="button" aria-label="새 방 만들기"></button>
     <hr>
     <input id="code" aria-label="친구의 방 코드" maxlength="5" placeholder="친구의 방 코드">
-    <button id="join" class="bread-button">방 입장</button>
+    <button id="join" class="bread-button" type="button" aria-label="방 입장"></button>
     <p id="msg" role="status"></p>
   </div>
 </section><section id="game"><div id="stageControls" class="stage-controls"></div><div id="stageTitle" class="stage-title"></div><div class="layout"><div><div class="kitchen" id="board"></div><div id="players"></div><section class="chat-panel"><div class="chat-heading">💬 팀 채팅 <small>Enter로 입력 · Esc로 취소</small></div><div id="chatLog" role="log" aria-live="polite"></div><form id="chatForm"><input id="chatInput" maxlength="180" autocomplete="off" placeholder="Enter를 눌러 채팅하기"><button type="submit">전송</button></form></section><div class="hint">WASD / 방향키 이동 · E 집기 / 놓기 / 조리 / 서빙 · 가까운 조리대 E · Enter 채팅 · 좌클릭 ? 핑 · 우클릭 ! 핑</div></div><aside class="panel order-panel"><h2 class="order-banner" id="orderBanner">주문</h2><div id="orders"></div><p class="score-note">주문 완료 시 팀 점수 획득 · 시간 초과 시 최대 20점 차감</p><p id="stageHelp" class="stage-help"></p><button id="copy">방 코드 복사</button> <button id="exit">나가기</button></aside></div></section><footer class="build-version">v0.4.6</footer></main><script src="/kitchen-art.js?v=045"></script><script src="/order-banner.js"></script><script src="/socket.io/socket.io.js"></script><script>
