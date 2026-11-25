@@ -153,23 +153,35 @@ body:has(#lobby:not([style*="display: none"])) .scene-decor { display: none; }
 #lobby #msg:empty { display: none; }
 #lobby .bread-button {
   --bread-row: 0%;
+  --toast-width: clamp(84px, 15cqw, 156px);
+  display: grid;
+  place-items: center;
   flex: none;
   width: clamp(132px, 18.5cqw, 212px);
-  height: clamp(50px, 8.2cqw, 90px);
   margin: 0;
   padding: 0;
   border: 0;
   border-radius: 12px;
-  background: transparent url("/lobby-toast-buttons.png") 0% var(--bread-row) / 200% 200% no-repeat;
-  filter: drop-shadow(0 2px 0 #8851264d);
+  background: transparent;
   transition: transform .12s ease;
 }
+#lobby .bread-button::before {
+  content: "";
+  width: var(--toast-width);
+  aspect-ratio: 3 / 2;
+  background: url("/lobby-toast-buttons.png") 0% var(--bread-row) / 200% 200% no-repeat;
+  filter: drop-shadow(0 2px 0 #8851264d);
+}
 #lobby #join { --bread-row: 100%; }
-#lobby .bread-button:is(:hover, :focus-visible) { background-position-x: 100%; }
+#lobby .bread-button:is(:hover, :focus-visible)::before { background-position-x: 100%; }
 #lobby .bread-button:focus-visible { outline: 2px solid #60371e; outline-offset: 2px; }
 #lobby .bread-button:active { transform: translateY(2px) scale(.98); }
 @media (max-width: 460px) {
   #lobby { margin-top: max(0px, calc((100svh - 510px) / 2)); }
+}
+@container (max-width: 560px) {
+  .lobby-controls { top: 39.4%; padding-top: 1px; gap: 2px; }
+  #lobby input { height: clamp(32px, 6.6cqw, 37px); }
 }
 @media (max-width: 700px) {
   .scene-decor img { opacity: .45; }
