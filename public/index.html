@@ -93,6 +93,8 @@ body:has(#lobby:not([style*="display: none"])) {
   background: #fff0bc;
 }
 main:has(#lobby:not([style*="display: none"])) {
+  --lobby-width: clamp(452px, min(100vw, 104svh), 1100px);
+  position: relative;
   max-width: none;
   padding: 0;
   overflow: hidden;
@@ -103,7 +105,7 @@ body:has(#lobby:not([style*="display: none"])) .scene-decor { display: none; }
   /* Keep the reference artwork proportional and center its form on narrow screens. */
   position: relative;
   left: 50%;
-  width: clamp(452px, min(100vw, 104svh), 1100px);
+  width: var(--lobby-width);
   max-width: none;
   aspect-ratio: 1278 / 1231;
   transform: translateX(-50%);
@@ -113,6 +115,26 @@ body:has(#lobby:not([style*="display: none"])) .scene-decor { display: none; }
   box-shadow: none;
   background: url("/lobby-reference.png") center / 100% 100% no-repeat;
   container-type: inline-size;
+}
+@media (min-width: 800px) and (min-aspect-ratio: 6/5) {
+  main:has(#lobby:not([style*="display: none"]))::before {
+    --check: calc(var(--lobby-width) * .026);
+    --wave: calc(var(--check) * 4);
+    --wave-depth: calc(var(--check) * .38);
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: calc(var(--lobby-width) * 1123 / 1278);
+    height: calc(var(--lobby-width) * 108 / 1278);
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 50% var(--wave-depth) at 50% 0,
+        #e6ab4b 97%, transparent 100%) left top / var(--wave) 100% repeat-x,
+      conic-gradient(#fff7d5 25%, #ffe6a0 0 50%, #ffde80 0 75%, #ffe6a0 0)
+        center var(--wave-depth) / calc(var(--check) * 2) calc(var(--check) * 2);
+    mask: radial-gradient(ellipse 50% calc(var(--wave-depth) - 2px) at 50% 0,
+      transparent 97%, #000 100%) left top / var(--wave) 100% repeat-x;
+  }
 }
 #lobbyLogo {
   position: absolute;
