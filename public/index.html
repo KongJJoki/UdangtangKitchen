@@ -93,7 +93,6 @@ body:has(#lobby:not([style*="display: none"])) {
   background: #fff0bc;
 }
 main:has(#lobby:not([style*="display: none"])) {
-  --lobby-width: clamp(452px, min(100vw, 104svh), 1100px);
   position: relative;
   max-width: none;
   padding: 0;
@@ -105,7 +104,7 @@ body:has(#lobby:not([style*="display: none"])) .scene-decor { display: none; }
   /* Keep the reference artwork proportional and center its form on narrow screens. */
   position: relative;
   left: 50%;
-  width: var(--lobby-width);
+  width: max(452px, 100%);
   max-width: none;
   aspect-ratio: 1278 / 1231;
   transform: translateX(-50%);
