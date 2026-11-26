@@ -187,15 +187,18 @@ body:has(#lobby:not([style*="display: none"])) .scene-decor { display: none; }
 }
 @media (min-width: 800px) and (min-height: 440px) and (min-aspect-ratio: 6/5) {
   #lobby {
+    --art-height: max(100svh, calc(100vw * 941 / 1672));
     left: 0;
     width: 100%;
     height: 100svh;
     aspect-ratio: auto;
     transform: none;
     background-image: url("/lobby-wide.png");
+    background-size: cover;
   }
   .lobby-controls {
-    inset: 36.5% auto auto 50%;
+    /* Anchor the form to the blank panel in the uniformly scaled artwork. */
+    inset: calc(50% - var(--art-height) * .075) auto auto 50%;
     width: min(46%, 85svh, 800px);
     transform: translateX(-50%);
     gap: clamp(3px, .85svh, 8px);
