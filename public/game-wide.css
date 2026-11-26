@@ -5,6 +5,24 @@
   font-display: swap;
 }
 
+#game .ticket .order-timer {
+  height: 11px;
+  border: 1px solid #bb8952;
+  border-radius: 10px;
+  background: #ffe8b5;
+  box-shadow: inset 0 1px 1px #c4945138, 0 1px #fffbed;
+}
+#game .ticket .order-timer i {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(#d4ec87 0 33%, #a9d45e 34% 74%, #82b54b 75%);
+  box-shadow: inset 0 0 0 1px #60853485;
+}
+#game .ticket .order-timer.urgent i {
+  background: linear-gradient(#ffc09c 0 33%, #e97859 34% 74%, #c34b38 75%);
+  box-shadow: inset 0 0 0 1px #963b2b;
+}
+
 /* The illustrated desktop layout shares one viewport with the live kitchen. */
 @media (min-width: 1000px) and (min-height: 650px) and (min-aspect-ratio: 6/5) {
   body:has(#game[style*="display: block"] #board),
@@ -317,8 +335,7 @@
   #game .ticket-body:is([data-dish="4"], [data-dish="5"], [data-dish="6"], [data-dish="7"]) { --dish-y: 50%; }
   #game .ticket-body:is([data-dish="8"], [data-dish="9"]) { --dish-y: 100%; }
   #game .ingredient-chip > img { width: clamp(19px, 3.8svh, 32px); height: auto; }
-  #game .ticket .bar { margin-left: 37%; background: #ffe6ad; border-color: #c69e53; }
-  #game .ticket .bar i { background: linear-gradient(#d0ec77, #84be4f); }
+  #game .ticket .order-timer { margin-left: 37%; }
   #game .score-note, #game .stage-help { font-size: 11px; margin: 6px 0; }
   #game .room-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
   #game .room-actions button { padding: 5px 9px; background: #ffe3a2; color: var(--ink); border-color: var(--gold); }
