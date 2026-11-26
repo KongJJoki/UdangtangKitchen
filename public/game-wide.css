@@ -5,20 +5,20 @@
   font-display: swap;
 }
 
-#game .ticket .order-timer {
+#game .order-timer {
   height: 11px;
   border: 1px solid #bb8952;
   border-radius: 10px;
   background: #ffe8b5;
   box-shadow: inset 0 1px 1px #c4945138, 0 1px #fffbed;
 }
-#game .ticket .order-timer i {
+#game .order-timer i {
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(#d4ec87 0 33%, #a9d45e 34% 74%, #82b54b 75%);
   box-shadow: inset 0 0 0 1px #60853485;
 }
-#game .ticket .order-timer.urgent i {
+#game .order-timer.urgent i {
   background: linear-gradient(#ffc09c 0 33%, #e97859 34% 74%, #c34b38 75%);
   box-shadow: inset 0 0 0 1px #963b2b;
 }
@@ -124,10 +124,10 @@
     --gold: #d9ab64;
     --cream: #fff7e3;
     --ink: #60391f;
-    --order-width: clamp(235px, 22vw, 370px);
+    --order-width: clamp(238px, 22vw, 410px);
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
-    width: min(94%, calc((100svh - 310px) * 2.2 + var(--order-width) + 34px));
+    width: min(98%, 2080px);
     height: 100svh;
     padding: 8px 10px 12px;
     color: var(--ink);
@@ -418,4 +418,144 @@
   #game .score-note, #game .stage-help { font-size: 12px; margin: 6px 0; }
   #game .room-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
   #game .room-actions button { padding: 5px 9px; background: #ffe3a2; color: var(--ink); border-color: var(--gold); }
+  #game .layout { grid-template-rows: minmax(0, 1fr) auto; }
+  #game .play-column, #game .game-bottom { display: contents; }
+  #game .board-frame { position: relative; grid-area: 1 / 1; }
+  #game .player-panel, #game #recipeGuide, #game .chat-panel {
+    background: var(--cream);
+    border: 2px solid var(--gold);
+    border-radius: 18px;
+    box-shadow: 0 3px #d9ab6452;
+  }
+  #game .player-panel { grid-area: 2 / 1; padding: 6px 10px; }
+  #game .player-panel #playerCount { display: inline-block; }
+  #game .player-panel #players { padding: 4px 0 0; border: 0; }
+  #game .order-panel { display: none; }
+  #game #recipeGuide {
+    display: block;
+    grid-area: 2 / 2;
+    padding: 5px 10px 7px;
+  }
+  #game #recipeTitle { margin: 0 0 4px; color: #714724; font-size: clamp(14px, 2.2svh, 20px); }
+  #game #recipeSteps { margin: 0; padding-inline-start: 17px; font-size: clamp(11px, 1.65svh, 15px); line-height: 1.2; }
+  #game #recipeSteps li::marker { color: #9a5b28; }
+  #game .chat-panel {
+    grid-area: 1 / 2;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 8px;
+    min-height: 0;
+    padding: 9px;
+  }
+  #game .chat-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    padding: 5px 9px;
+    border: 1px solid #efc679;
+    border-radius: 20px;
+    background: #ffe7a4;
+    color: #643b20;
+    font-size: clamp(17px, 2.7svh, 25px);
+  }
+  #game .chat-heading small { display: none; }
+  #game #wideExit { display: inline-block; padding: 3px 7px; font-size: 12px; background: #fff6d9; color: #754622; border-color: var(--gold); }
+  #game #chatLog {
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 7px;
+    border: 1px solid #efd6a8;
+    border-radius: 13px;
+    background: #fffaf0;
+  }
+  #game .chat-line {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    gap: 1px 6px;
+    margin-bottom: 9px;
+  }
+  #game .chat-avatar {
+    display: grid;
+    place-items: center;
+    grid-row: span 2;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--chat-color) 28%, #fff4d7);
+  }
+  #game .chat-avatar :is(img, svg) { width: 29px; height: 30px; }
+  #game .chat-line b { overflow-wrap: anywhere; }
+  #game .chat-line time { display: inline; color: #82654f; font-size: 11px; }
+  #game .chat-message {
+    grid-column: 2 / -1;
+    justify-self: start;
+    padding: 3px 7px;
+    border: 1px solid #e7c89b;
+    border-radius: 10px;
+    background: #fff4db;
+  }
+  #game #chatForm { gap: 5px; }
+  #game #chatForm input { padding: 6px 8px; border-color: #dfbb84; background: #fffaf1; }
+  #game #chatForm button { padding: 5px 9px; background: #ffda83; color: #693e20; border-color: #c9964d; }
+  #game #customers {
+    display: grid;
+    position: absolute;
+    z-index: 4;
+    top: 4px;
+    right: 7px;
+    width: min(38%, 580px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+    pointer-events: none;
+  }
+  #game .customer { display: grid; grid-row: 1; grid-template-rows: 1fr auto; min-width: 0; }
+  #game .customer-order {
+    position: relative;
+    display: grid;
+    gap: 2px;
+    padding: 3px 5px;
+    color: #633719;
+    background: #fff8e8;
+    border: 2px solid #ad7742;
+    border-radius: 13px;
+    box-shadow: 0 2px #99613944;
+    animation: order-appear .32s ease-out both;
+  }
+  #game .customer-order::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: calc(50% - 4px);
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #ad7742;
+    border-bottom: 2px solid #ad7742;
+    background: #fff8e8;
+    transform: rotate(45deg);
+  }
+  #game .customer-order > strong { text-align: center; font-size: clamp(12px, 1.65svh, 17px); }
+  #game .customer-food { gap: 3px; align-items: center; }
+  #game .customer-food.ticket-body::before { flex: 0 0 clamp(24px, 4.4svh, 43px); }
+  #game .customer-ingredients { display: flex; flex-wrap: wrap; gap: 1px; }
+  #game .customer-ingredients :is(img, svg) { display: block; width: clamp(15px, 2.7svh, 25px); height: auto; }
+  #game .customer-time { display: flex; gap: 4px; align-items: center; font-size: clamp(10px, 1.5svh, 14px); white-space: nowrap; }
+  #game .customer-timer { flex: 1; min-width: 0; }
+  #game .customer-timer .order-timer { margin: 0; height: 8px; }
+  #game .customer-avatar {
+    width: clamp(34px, 5.8svh, 57px);
+    aspect-ratio: 1;
+    margin: 4px auto 0;
+    background: url("/game-customers.png") 0 50% / 300% auto no-repeat;
+    animation: customer-arrive .45s ease-out both;
+  }
+  #game .customer-avatar[data-animal="1"] { background-position-x: 50%; }
+  #game .customer-avatar[data-animal="2"] { background-position-x: 100%; }
+  @keyframes customer-arrive { from { transform: translate(22px, 7px); opacity: 0; } }
+  @keyframes order-appear { from { transform: translateY(4px) scale(.96); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    #game :is(.customer-avatar, .customer-order) { animation: none; }
+  }
 }
