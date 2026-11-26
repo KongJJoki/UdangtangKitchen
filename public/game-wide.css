@@ -49,6 +49,9 @@
   background: url("/game-stage-dishes.png") var(--food-x) var(--food-y) / 400% 400% no-repeat;
 }
 .recipe-thumb > .stage-dish { width: 100%; height: 100%; }
+.rice-dish { background-image: url("/game-rice-dishes.png"); background-size: 400% 200%; }
+.ready-rice-dish { display: inline-flex; }
+.ready-rice-dish > .stage-dish { width: clamp(20px, 2.5vw, 33px); }
 
 #game .order-timer {
   height: 11px;
