@@ -242,7 +242,13 @@ const artImage=(key,cls='',alt='')=>rasterURLs[key]?'<img draggable="false" clas
 document.getElementById('gameLogo').innerHTML=artImage('logo','logo-art','우당탕 키친')||'우당탕 키친';
 document.querySelector('.scene-decor').innerHTML=['stove','lettuce','chop','tomato','hotpot','egg']
   .map(key=>artImage(key,key)).join('');
-const dishSprite = name => name==='치즈 햄버거'?10:name==='더블 햄버거'?11:[
+const stageFoodSprites = [
+  '고기 덮밥','달걀 덮밥','비빔밥','당근 고기 덮밥',
+  '연어 초밥','참치 초밥','연어 김말이','모둠 초밥',
+  '고기 마라탕','버섯 마라탕','모둠 마라탕','두부 배추 마라탕',
+  '고기 꼬치','채소 꼬치','모둠 꼬치','고기 버섯 꼬치'
+];
+const dishSprite = name => stageFoodSprites.includes(name)?-1:name==='치즈 햄버거'?10:name==='더블 햄버거'?11:[
   '샌드위치', '샐러드', '햄버거', '스테이크', '덮밥', '비빔밥', '초밥', '김말이', '마라탕', '꼬치'
 ].findIndex(part => name.includes(part));
 function orderPercent(order,now=Date.now()){
@@ -283,7 +289,13 @@ function renderCustomers(r){
     node.querySelector('.customer-clock').textContent=Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');
   }
 }
-function dishArt(o){const n=o.name;return artImage(n.includes('마라탕')?'soup':n.includes('꼬치')?'skewer':n.includes('초밥')||n.includes('김말이')?'sushi':n.includes('샐러드')?'salad':n.includes('버거')||n.includes('샌드위치')?'burger':n.includes('덮밥')||n.includes('비빔밥')?'rice':'steak','dish-art',n)}
+function dishArt(o){
+  const n=o.name,index=stageFoodSprites.indexOf(n);
+  if(index!==-1){
+    const x=(index%4)*100/3,y=[3,35.3,67.5,100][Math.floor(index/4)];
+    return '<span class="dish-art stage-dish" role="img" aria-label="'+escapeHTML(n)+'" style="--food-x:'+x+'%;--food-y:'+y+'%"></span>';
+  }
+  return artImage(n.includes('마라탕')?'soup':n.includes('꼬치')?'skewer':n.includes('초밥')||n.includes('김말이')?'sushi':n.includes('샐러드')?'salad':n.includes('버거')||n.includes('샌드위치')?'burger':n.includes('덮밥')||n.includes('비빔밥')?'rice':'steak','dish-art',n)}
 const $=id=>document.getElementById(id),socket=io(),animals=['🐶','🐧','🐰','🐱','🐻','🐹'];let state=null;const names={tomato:'토마토',lettuce:'양상추',meat:'고기',bread:'빵',cheese:'치즈',plate:'접시',chop:'손질',stove:'가열',counter:'조립',trash:'쓰레기',serve:'서빙'};const icons={tomato:'🍅',lettuce:'🥬',meat:'🥩',bread:'🍞',cheese:'🧀',plate:'🍽️',chop:'🔪',stove:'🍳',counter:'🟫',trash:'🗑️',serve:'🔔','chopped tomato':'🍅','chopped lettuce':'🥬','cooked meat':'🥩'};Object.assign(names,{rice:'쌀',carrot:'당근',egg:'달걀',salmon:'연어',tuna:'참치',seaweed:'김',mushroom:'버섯',cabbage:'배추',tofu:'두부',pepper:'파프리카',stick:'꼬치 막대',ricepot:'밥솥',hotpot:'큰 냄비',grill:'회전 그릴'});Object.assign(icons,{rice:'🌾',carrot:'🥕',egg:'🥚',salmon:'🐟',tuna:'🐟',seaweed:'◼️',mushroom:'🍄',cabbage:'🥬',tofu:'◻️',pepper:'🫑',stick:'🍢',ricepot:'🍚',hotpot:'🍲',grill:'🔥','cooked rice':'🍚','cooked egg':'🍳','chopped carrot':'🥕','chopped salmon':'🐟','chopped tuna':'🐟','chopped meat':'🥩','chopped mushroom':'🍄','chopped cabbage':'🥬','chopped tofu':'◻️','chopped pepper':'🫑'});const ingredientName=k=>k.startsWith('chopped ')?'손질 '+(names[k.slice(8)]||k):k.startsWith('cooked ')?(k==='cooked rice'?'밥':'익힌 '+(names[k.slice(7)]||k)):names[k]||k;const themes={random:['🎲 랜덤 순환','매 판 다른 주방 · 점수 누적'],burger:['🍔 버거 & 샌드위치','채소 손질 → 고기 굽기 → 접시에 조립'],rice:['🍚 밥집','쌀을 밥솥에 넣어 5초 조리 → 고기·달걀·당근과 조립'],sushi:['🍣 초밥집','쌀을 밥솥에 넣기 → 연어·참치 손질 → 접시에 조립'],mala:['🍲 마라탕','재료 손질 → 큰 냄비에 2~3개 넣기 → 빈손 E로 5초 끓이기 → 빈 접시를 들고 E로 담기'],skewer:['🍢 꼬치','꼬치 막대를 조립대에 놓고 손질 재료 끼우기 → 그릴에 놓기 → 빈손 E로 1초 간격 3번 돌리기 → 빈 접시로 담기']};function recipeStepsFor(stage,recipe){
   const items=recipe.items;
   const prep=[];
@@ -309,7 +321,7 @@ let dialogMode='',dialogStage='';
 function recipeCard(recipe,stage){
   const counts=new Map();
   for(const item of recipe.items)counts.set(item,(counts.get(item)||0)+1);
-  return '<article class="recipe-card"><h3>'+escapeHTML(recipe.name)+'</h3><div class="recipe-ingredients">'+[...counts].map(([item,count])=>'<span>'+food(item)+escapeHTML(ingredientName(item))+(count>1?' ×'+count:'')+'</span>').join('')+'</div><ol>'+recipeStepsFor(stage,recipe).map(step=>'<li>'+escapeHTML(step)+'</li>').join('')+'</ol></article>';
+  return '<article class="recipe-card"><h3>'+recipeIcon(recipe)+escapeHTML(recipe.name)+'</h3><div class="recipe-ingredients">'+[...counts].map(([item,count])=>'<span>'+food(item)+escapeHTML(ingredientName(item))+(count>1?' ×'+count:'')+'</span>').join('')+'</div><ol>'+recipeStepsFor(stage,recipe).map(step=>'<li>'+escapeHTML(step)+'</li>').join('')+'</ol></article>';
 }
 function recipeIcon(recipe){
   const dish=dishSprite(recipe.name);
