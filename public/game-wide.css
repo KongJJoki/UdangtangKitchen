@@ -1,3 +1,10 @@
+@font-face {
+  font-family: Jua;
+  src: url("/Jua-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
 /* The illustrated desktop layout shares one viewport with the live kitchen. */
 @media (min-width: 1000px) and (min-height: 650px) and (min-aspect-ratio: 6/5) {
   body:has(#game[style*="display: block"] #board),
@@ -10,14 +17,17 @@
     --gold: #d9ab64;
     --cream: #fff7e3;
     --ink: #60391f;
-    --order-width: clamp(225px, 22vw, 315px);
+    --order-width: clamp(235px, 22vw, 370px);
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
-    width: min(100%, calc((100svh - 275px) * 1328 / 790 + var(--order-width) + 34px));
+    width: min(94%, calc((100svh - 310px) * 2.2 + var(--order-width) + 34px));
     height: 100svh;
     padding: 8px 10px 12px;
     color: var(--ink);
+    font-family: Jua, "Malgun Gothic", sans-serif;
+    font-synthesis: none;
   }
+  main:has(#game[style*="display: block"]) :is(button, input, kbd) { font-family: inherit; }
   main:has(#game[style*="display: block"]) > .build-version { display: none; }
   main:has(#game[style*="display: block"]) > header {
     grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
@@ -111,8 +121,7 @@
   }
   #scoreBox .narrow-only { display: none; }
   #scoreBox label::before,
-  .hud-right .stat::before,
-  #game #orderBanner::before {
+  .hud-right .stat::before {
     content: "";
     flex: none;
     width: calc(var(--art-w) * var(--art-scale));
@@ -157,13 +166,14 @@
     min-height: 0;
   }
   #game .board-frame {
-    container-type: size;
     display: grid;
-    place-items: center;
     min-height: 0;
   }
   #game #board {
-    width: min(100%, calc(100cqh * 1328 / 790));
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    aspect-ratio: auto;
     border: 4px solid #fff5d9;
     border-radius: 22px;
     outline: 2px solid var(--gold);
@@ -179,6 +189,7 @@
   }
   #game .room-scene :is(.window-frame, .left-wall-art, .right-wall-art) { display: none; }
   #game :is(.playfield, .floor-art) { top: 31%; }
+  #game .player .animal { left: -6%; width: 112%; height: 168%; }
   #game .floor-art {
     background-color: #ffebce;
     background-image:
@@ -193,7 +204,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(160px, .72fr);
     gap: 4px 8px;
   }
-  #game #players, #game .wide-keys, #game .chat-panel {
+  #game #players, #game .chat-panel {
     margin: 0;
     padding: 5px 8px;
     background: var(--cream);
@@ -221,40 +232,25 @@
     font-weight: 900;
   }
   #game .game-bottom > .hint { display: none; }
-  #game .wide-keys {
-    display: flex;
+  #game .chat-panel {
     grid-column: 2;
     grid-row: 1 / 3;
-    gap: 5px 9px;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 800;
+    min-width: 0;
   }
-  #game .wide-keys kbd {
-    display: inline-block;
-    padding: 2px 4px;
-    margin-right: 2px;
-    border: 1px solid #ad753f;
-    border-radius: 5px;
-    background: #fffbee;
-    box-shadow: 0 2px #b78452;
+  #game .chat-heading { font-size: 13px; }
+  #game #chatLog { height: 20px; margin: 2px 0; overflow: auto; scrollbar-width: thin; }
+  #game #chatForm :is(input, button) { padding-block: 3px; font-size: 12px; }
+  body:has(#game[style*="display: block"]) .game-guide {
+    display: block;
+    width: min(94%, 850px);
+    margin: 0 auto 18px;
+    padding: 12px 16px;
+    border: 1px solid #d9ab64;
+    border-radius: 14px;
+    background: #fff7e3;
+    color: #60391f;
+    font: 16px/1.5 Jua, "Malgun Gothic", sans-serif;
   }
-  #game .wide-keys button { padding: 3px 7px; font-size: 11px; }
-  #game .chat-panel {
-    position: absolute;
-    z-index: 5;
-    right: 0;
-    bottom: 100%;
-    width: min(100%, 350px);
-    opacity: 0;
-    pointer-events: none;
-  }
-  #game .chat-panel:focus-within { opacity: 1; pointer-events: auto; }
-  #game .chat-heading { font-size: 11px; }
-  #game #chatLog { max-height: 24px; min-height: 0; margin: 2px 0; overflow: auto; }
-  #game #chatForm :is(input, button) { padding-block: 3px; font-size: 11px; }
 
   #game .order-panel {
     display: flex;
@@ -266,18 +262,26 @@
     background: var(--cream);
     box-shadow: 0 4px #d9ab6452;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #d9ab64 #fff7e3;
   }
   #game #orderBanner {
     gap: 6px;
     align-items: center;
     margin: 0 auto 6px;
-    padding: 0 10px 0 4px;
+    padding: 0 14px 0 8px;
     background: #ffe6a2;
     border: 1px solid #edc375;
     border-radius: 24px;
     font-size: clamp(16px, 2.8svh, 24px);
+    color: #65391c;
   }
-  #game #orderBanner::before { --art-x: 1119; --art-y: 292; --art-w: 79; --art-h: 57; --art-scale: .65px; }
+  #game #orderBanner::before {
+    content: "";
+    width: clamp(40px, 6.2svh, 59px);
+    height: clamp(30px, 4.6svh, 43px);
+    background: url("/game-order-bell.png") center / contain no-repeat;
+  }
   #game #orderBanner img { display: none; }
   #game #orderBanner .wide-only { display: inline; }
   #game .ticket {
@@ -301,7 +305,7 @@
   #game .ticket-body:not([data-dish="-1"]) > .dish-art { display: none; }
   #game .ticket-body:not([data-dish="-1"])::before {
     content: "";
-    flex: 0 0 34%;
+    flex: 0 0 clamp(55px, 10svh, 91px);
     aspect-ratio: 1;
     background: url("/game-dishes.png") var(--dish-x, 0%) var(--dish-y, 0%) / 400% 300% no-repeat;
   }
