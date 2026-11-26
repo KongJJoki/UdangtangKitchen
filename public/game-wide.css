@@ -77,6 +77,12 @@
 #game .player .name { top: -107%; font-size: clamp(10px, 1vw, 15px); }
 #game .tile > small { font-size: clamp(9px, .95vw, 14px); }
 #game .ticket .ingredient-chip { font-size: clamp(11px, 1.05vw, 14px); }
+#game .tile[data-t="trash"] > .station-image {
+  width: 100%;
+  height: 155%;
+  bottom: 4%;
+  object-fit: contain;
+}
 #game .speech-bubble {
   position: absolute;
   z-index: 7;
@@ -576,7 +582,7 @@
   #game .customer {
     display: grid;
     grid-row: 1;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 1fr auto auto;
     min-width: 0;
   }
   #game .customer-order {
@@ -617,6 +623,21 @@
   }
   #game .customer-avatar[data-animal="1"] { background-position-x: 50%; }
   #game .customer-avatar[data-animal="2"] { background-position-x: 100%; }
+  #game .customer-wait {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    min-width: 0;
+    padding: 2px 4px;
+    border-radius: 7px;
+    background: #fff5df;
+    color: #673b21;
+    font-size: clamp(10px, 1.6svh, 14px);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  #game .customer-wait .order-timer { flex: 1; min-width: 0; height: 9px; margin: 0; }
+  #game .customer-wait .urgent + .customer-clock { color: #a1372c; }
   #game .furniture-base[data-furniture="serve"] {
     border-color: #b7815b;
     background: linear-gradient(#ffe5d9 0 65%, #edbe97 66% 74%, #c99367 75% 100%);

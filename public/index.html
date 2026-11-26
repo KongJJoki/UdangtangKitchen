@@ -245,9 +245,12 @@ document.querySelector('.scene-decor').innerHTML=['stove','lettuce','chop','toma
 const dishSprite = name => name==='치즈 햄버거'?10:name==='더블 햄버거'?11:[
   '샌드위치', '샐러드', '햄버거', '스테이크', '덮밥', '비빔밥', '초밥', '김말이', '마라탕', '꼬치'
 ].findIndex(part => name.includes(part));
+function orderPercent(order,now=Date.now()){
+  return Math.max(0,Math.min(100,(order.until-now)/order.duration*100));
+}
 function orderTimer(o){
-  const percent=Math.max(0,Math.min(100,(o.until-Date.now())/o.duration*100));
-  const urgent=percent<10;
+  const percent=orderPercent(o);
+  const urgent=percent<=10;
   return '<div class="bar order-timer'+(urgent?' urgent':'')+'" role="progressbar" aria-label="주문 남은 시간" aria-valuenow="'+Math.round(percent)+'"><i style="width:'+percent+'%"></i></div>';
 }
 function renderCustomers(r){
@@ -267,9 +270,17 @@ function renderCustomers(r){
       if(slot===undefined)continue;
       node.dataset.slot=slot;
       node.style.gridColumn=slot+1;
-      node.innerHTML='<div class="customer-order"><strong>'+escapeHTML(order.name)+'</strong><div class="customer-food ticket-body" data-dish="'+dishSprite(order.name)+'">'+dishArt(order)+'</div></div><div class="customer-avatar" data-animal="'+((order.id-1)%3)+'" aria-hidden="true"></div>';
+      node.innerHTML='<div class="customer-order"><strong>'+escapeHTML(order.name)+'</strong><div class="customer-food ticket-body" data-dish="'+dishSprite(order.name)+'">'+dishArt(order)+'</div></div><div class="customer-avatar" data-animal="'+((order.id-1)%3)+'" aria-hidden="true"></div><div class="customer-wait">'+orderTimer(order)+'<span class="customer-clock"></span></div>';
       queue.append(node);
     }
+    const now=Date.now();
+    const percent=orderPercent(order,now);
+    const seconds=Math.max(0,Math.ceil((order.until-now)/1000));
+    const bar=node.querySelector('.order-timer');
+    bar.classList.toggle('urgent',percent<=10);
+    bar.setAttribute('aria-valuenow',Math.round(percent));
+    bar.firstElementChild.style.width=percent+'%';
+    node.querySelector('.customer-clock').textContent=Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');
   }
 }
 function dishArt(o){const n=o.name;return artImage(n.includes('마라탕')?'soup':n.includes('꼬치')?'skewer':n.includes('초밥')||n.includes('김말이')?'sushi':n.includes('샐러드')?'salad':n.includes('버거')||n.includes('샌드위치')?'burger':n.includes('덮밥')||n.includes('비빔밥')?'rice':'steak','dish-art',n)}
@@ -369,7 +380,7 @@ if(chopped)a='<g transform="translate(1 8) scale(.64)">'+a+'</g><g transform="tr
 function stationArt(t){let a='',base=R(5,10,70,65,'#be9679',8)+R(5,5,70,60,'#f6e0bf',8);if(['chop','stove','ricepot','hotpot','grill','counter','serve','trash'].includes(t)){a=base;switch(t){case'chop':a+=R(15,14,49,42,'#d6a375',5)+L('M21 21H56M21 49H56','#b98557')+P('M20 43L48 19 57 28 29 47Z','#e8e9e4')+R(47,16,18,9,'#8f6753',3);break;case'stove':case'grill':a+=R(11,11,58,49,'#a7b4bc',6)+O(37,32,22,19,'#575b64')+O(37,30,17,14,'#858e94')+R(56,29,13,7,'#806453',3)+(t==='grill'?L('M22 24L50 39M22 32L45 45M30 19L54 33','#f9c77d',3):O(36,29,10,8,'#edb278'))+O(20,54,3,3,'#d98b7e');break;case'ricepot':a+=O(40,47,26,19,'#c9c7dd')+R(14,23,52,33,'#e8e6f1',12)+O(40,24,26,12,'#f7f4fb')+R(31,15,18,6,'#a9a8c0',3)+R(32,44,17,7,'#b6d5bd',2);break;case'hotpot':a+=R(8,33,12,9,'#b87967')+R(60,33,12,9,'#b87967')+O(40,40,28,25,'#bd7c6e')+O(40,30,28,19,'#e8a38a')+O(40,30,22,13,'#bd6653')+L('M29 18Q22 10 30 4M46 18Q39 10 47 4','#fff9ed',3);break;case'counter':a+=R(11,11,58,45,'#ffefd5',5)+L('M18 20H62M18 46H62','#e0c39f');break;case'serve':a+=R(8,8,64,16,'#df9e91',3)+R(10,25,60,32,'#fff4df',3)+O(40,43,15,10,'#e9c279')+R(36,29,8,6,'#d2a759',3);break;case'trash':a+=R(23,17,34,43,'#a6b0a8',6)+R(19,13,42,10,'#d5dcd4',5)+L('M33 29V51M45 29V51','#788d82');break}return svg(a)}a=R(5,14,70,60,'#c99d75',7)+R(5,7,70,58,'#e9c49a',7)+R(11,12,58,47,'#ad805b',5)+'<g transform="translate(7 1) scale(.83)">'+food(t).replace(/^<svg[^>]*>|<\/svg>$/g,'')+'</g>'+L('M9 63H71','#fff1d0',3);return svg(a)}
 function chef(i,color){const palette=['#e8b77d','#91b5cc','#fff4eb','#c8c4d0','#bf9678','#efc6a0'],f=palette[i%6];let ears=i===2?O(25,19,8,18,f)+O(53,19,8,18,f)+O(25,18,3,11,'#efb6b1')+O(53,18,3,11,'#efb6b1'):i===3?P('M15 34L15 10 34 24Z',f)+P('M47 24L65 10 65 35Z',f):i===1?'':O(19,26,11,12,f)+O(61,26,11,12,f);return svg(O(40,73,26,5,'#c4a58a')+O(25,68,11,7,f)+O(55,68,11,7,f)+O(40,55,23,22,'#fff9e8')+P('M22 53L58 53 56 70 24 70Z',color)+R(31,56,18,13,'#fff8e9',3)+ears+O(40,36,28,24,f)+(i===1?O(40,39,21,17,'#fff9e8'):O(40,45,17,11,'#fff3df'))+O(29,36,2.7,3.6,'#55443e')+O(51,36,2.7,3.6,'#55443e')+O(20,44,4,2.5,'#eeada9')+O(60,44,4,2.5,'#eeada9')+(i===1?P('M34 41L46 41 40 48Z','#e9b061'):O(40,43,3,2,'#77564d'))+L('M36 48Q40 52 44 48')+P('M24 19Q13 9 23 3Q31 -2 37 5Q44 -5 53 3Q67 6 57 20L55 25H25Z','#fffdf5')+L('M27 19H53','#d8c9b7')+P('M32 51L40 56 48 51 45 60 35 60Z',color))}
 function heldArt(i){if(!i)return '';const group=['plate','stick','mala raw','mala cooked','skewer raw','skewer cooked'].includes(i.type);return group?'<span class="mini-food">'+(i.type==='plate'?food('plate'):i.type.includes('mala')?stationArt('hotpot'):food('stick'))+'</span><span class="mini-parts">'+(i.items||[]).map(k=>'<span>'+food(k)+'</span>').join('')+'</span>':food(i.type)}
-function roomDecor(stage){return '<div class="room-scene"><div class="backwall"></div><div class="window-frame">'+artImage('window','window-art')+'</div><div class="left-wall-art">'+artImage('wallleft','wall-art')+'</div><div class="right-wall-art">'+artImage('wallright','wall-art')+'</div><div class="floor-art"></div><div class="room-rug rug1">'+artImage('rug','rug-art')+'</div><div class="room-rug rug2">'+artImage('rug','rug-art')+'</div><div class="corner-plant">'+artImage('plant','plant-art')+'</div></div>'}
+function roomDecor(stage){return '<div class="room-scene"><div class="backwall"></div><div class="window-frame">'+artImage('window','window-art')+'</div><div class="left-wall-art">'+artImage('wallleft','wall-art')+'</div><div class="right-wall-art">'+artImage('wallright','wall-art')+'</div><div class="floor-art"></div><div class="room-rug rug1">'+artImage('rug','rug-art')+'</div><div class="room-rug rug2">'+artImage('rug','rug-art')+'</div></div>'}
 function furnitureBase(stations){
   const groups=[
     stations.filter(t=>t.y===0&&t.t!=='serve'),
