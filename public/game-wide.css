@@ -120,7 +120,6 @@
     font-size: 17px;
   }
   #scoreBox .narrow-only { display: none; }
-  #scoreBox label::before,
   .hud-right .stat::before {
     content: "";
     flex: none;
@@ -131,7 +130,6 @@
       calc(1448 * var(--art-scale)) auto no-repeat;
     border-radius: 30%;
   }
-  #scoreBox label::before { --art-x: 126; --art-y: 181; --art-w: 72; --art-h: 64; --art-scale: .66px; }
   .hud-right .stat::before {
     --art-x: 714;
     --art-y: 191;
@@ -276,12 +274,16 @@
     font-size: clamp(16px, 2.8svh, 24px);
     color: #65391c;
   }
+  #scoreBox label::before,
   #game #orderBanner::before {
     content: "";
-    width: clamp(40px, 6.2svh, 59px);
-    height: clamp(30px, 4.6svh, 43px);
-    background: url("/game-order-bell.png") center / contain no-repeat;
+    flex: none;
+    width: clamp(42px, 6.2svh, 55px);
+    aspect-ratio: 4 / 3;
+    background: url("/game-badge-icons.png") var(--badge-x) 50% / 355% auto no-repeat;
   }
+  #scoreBox label::before { --badge-x: 15.5%; }
+  #game #orderBanner::before { --badge-x: 84%; }
   #game #orderBanner img { display: none; }
   #game #orderBanner .wide-only { display: inline; }
   #game .ticket {
