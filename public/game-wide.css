@@ -1,0 +1,163 @@
+/* The illustrated desktop layout shares one viewport with the live kitchen. */
+@media (min-width: 1000px) and (min-height: 650px) and (min-aspect-ratio: 6/5) {
+  body:has(#game[style*="display: block"] #board),
+  body:has(#game[style*="display: block"] #overlay):not(:has(.stage-controls.during-play)) {
+    background: #fff0c2 url("/game-wallpaper.png") center 68% / cover no-repeat fixed;
+  }
+  body:has(#game[style*="display: block"]) .scene-decor { display: none; }
+
+  main:has(#game[style*="display: block"]) {
+    --gold: #d9ab64;
+    --cream: #fff7e3;
+    --ink: #60391f;
+    --order-width: clamp(225px, 22vw, 315px);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    width: min(100%, calc((100svh - 275px) * 1328 / 790 + var(--order-width) + 34px));
+    height: 100svh;
+    padding: 8px 10px 12px;
+    color: var(--ink);
+  }
+  main:has(#game[style*="display: block"]) > .build-version { display: none; }
+  main:has(#game[style*="display: block"]) > header {
+    grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
+    grid-template-rows: auto auto;
+    gap: 4px 10px;
+    min-height: 0;
+    margin: 0 0 8px;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  main:has(#game[style*="display: block"]) header h1 {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+  main:has(#game[style*="display: block"]) #gameLogo { width: auto; }
+  main:has(#game[style*="display: block"]) .logo-art { height: clamp(49px, 10svh, 94px); width: auto; }
+  main:has(#game[style*="display: block"]) #scoreBox,
+  main:has(#game[style*="display: block"]) .hud-right {
+    width: 100%;
+    grid-row: 2;
+    min-height: 46px;
+    border: 2px solid var(--gold);
+    border-radius: 28px;
+    background: var(--cream);
+    box-shadow: 0 3px #d9ab6452;
+  }
+  main:has(#game[style*="display: block"]) #scoreBox {
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 4px 14px;
+  }
+  main:has(#game[style*="display: block"]) #scoreBox label {
+    color: var(--ink);
+    background: #ffe3a2;
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  main:has(#game[style*="display: block"]) #teamScore {
+    color: #75421d;
+    font-size: clamp(22px, 4.8svh, 45px);
+    text-shadow: 0 1px #fff, 0 2px #f4cd87;
+  }
+  main:has(#game[style*="display: block"]) .hud-right {
+    grid-column: 2;
+    justify-content: stretch;
+    gap: 0;
+  }
+  main:has(#game[style*="display: block"]) .hud-right .stat {
+    flex: 1;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    padding: 4px 10px;
+    color: var(--ink);
+  }
+  main:has(#game[style*="display: block"]) .hud-right .stat + .stat { border-left: 1px solid var(--gold); }
+  main:has(#game[style*="display: block"]) .hud-right .stat label { color: #754b30; }
+  main:has(#game[style*="display: block"]) .hud-right .stat strong { font-size: clamp(19px, 3.1svh, 28px); }
+  main:has(#game[style*="display: block"]) #timeLabel::before { content: "◷ "; }
+
+  #game[style*="display: block"] {
+    display: grid !important;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    min-height: 0;
+  }
+  #game #stageControls { grid-row: 1; }
+  #game #stageControls.during-play { display: none; }
+  #game #stageTitle { grid-row: 2; margin: 0 0 4px; font-size: 13px; }
+  #game .layout {
+    grid-row: 3;
+    grid-template-columns: minmax(0, 1fr) var(--order-width);
+    gap: 10px;
+    min-height: 0;
+    align-items: stretch;
+  }
+  #game .play-column {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 7px;
+    min-height: 0;
+  }
+  #game .board-frame {
+    container-type: size;
+    display: grid;
+    place-items: center;
+    min-height: 0;
+  }
+  #game #board {
+    width: min(100%, calc(100cqh * 1328 / 790));
+    border: 4px solid #fff5d9;
+    border-radius: 22px;
+    outline: 2px solid var(--gold);
+    box-shadow: 0 4px #d9ab6452;
+  }
+  #game .game-bottom {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(160px, .72fr);
+    gap: 4px 8px;
+  }
+  #game #players, #game .game-bottom > .hint, #game .chat-panel {
+    margin: 0;
+    padding: 5px 8px;
+    background: var(--cream);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+  }
+  #game #players {
+    grid-column: 1;
+    grid-row: 1;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 4px;
+  }
+  #game #players .player-chip { flex: none; padding: 2px 6px; font-size: 11px; }
+  #game #players .player-chip :is(img, svg) { width: 23px; height: 23px; }
+  #game .game-bottom > .hint { grid-column: 1; grid-row: 2; line-height: 1.35; font-size: 11px; }
+  #game .chat-panel { grid-column: 2; grid-row: 1 / 3; min-width: 0; }
+  #game .chat-heading { font-size: 11px; }
+  #game #chatLog { max-height: 24px; min-height: 0; margin: 2px 0; overflow: auto; }
+  #game #chatForm :is(input, button) { padding-block: 3px; font-size: 11px; }
+
+  #game .order-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 9px;
+    border: 2px solid var(--gold);
+    border-radius: 22px;
+    background: var(--cream);
+    box-shadow: 0 4px #d9ab6452;
+    overflow-y: auto;
+  }
+  #game #orderBanner { margin: 0 0 7px; }
+  #game #orderBanner img { width: auto; max-width: 100%; max-height: 58px; }
+  #game .ticket { background: #fff9ed; border-color: var(--gold); box-shadow: none; }
+  #game .score-note, #game .stage-help { font-size: 11px; margin: 6px 0; }
+  #game .room-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
+  #game .room-actions button { padding: 5px 9px; background: #ffe3a2; color: var(--ink); border-color: var(--gold); }
+}
