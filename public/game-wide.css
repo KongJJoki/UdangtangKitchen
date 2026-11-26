@@ -400,16 +400,6 @@
     border-radius: 16px;
     box-shadow: inset 0 0 0 2px #fffdf5;
   }
-  #game .ticket::before {
-    content: "✦";
-    left: 5px;
-    top: -4px;
-    width: auto;
-    height: auto;
-    color: #edab35;
-    background: none;
-    box-shadow: none;
-  }
   #game .ticket-head b { color: #62391f; font-size: clamp(15px, 2.2svh, 20px); }
   #game .ticket-body:not([data-dish="-1"]) > .dish-art { display: none; }
   #game .ticket-body:not([data-dish="-1"])::before {
