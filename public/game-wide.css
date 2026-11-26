@@ -501,17 +501,21 @@
   #game #chatForm input { padding: 6px 8px; border-color: #dfbb84; background: #fffaf1; }
   #game #chatForm button { padding: 5px 9px; background: #ffda83; color: #693e20; border-color: #c9964d; }
   #game #customers {
-    display: grid;
+    display: block;
     position: absolute;
     z-index: 4;
-    top: 4px;
-    right: 7px;
-    width: min(38%, 580px);
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 5px;
+    inset-inline: 4px;
+    top: calc(31% + 2px);
+    height: 1px;
     pointer-events: none;
   }
-  #game .customer { display: grid; grid-row: 1; grid-template-rows: 1fr auto; min-width: 0; }
+  #game .customer {
+    position: absolute;
+    bottom: 0;
+    width: 10.35%;
+    min-width: 0;
+    transform: translateX(-50%);
+  }
   #game .customer-order {
     position: relative;
     display: grid;
@@ -545,7 +549,7 @@
   #game .customer-timer { flex: 1; min-width: 0; }
   #game .customer-timer .order-timer { margin: 0; height: 8px; }
   #game .customer-avatar {
-    width: clamp(34px, 5.8svh, 57px);
+    width: clamp(25px, 4.6svh, 43px);
     aspect-ratio: 1;
     margin: 4px auto 0;
     background: url("/game-customers.png") 0 50% / 300% auto no-repeat;
@@ -553,6 +557,10 @@
   }
   #game .customer-avatar[data-animal="1"] { background-position-x: 50%; }
   #game .customer-avatar[data-animal="2"] { background-position-x: 100%; }
+  #game .furniture-base[data-furniture="serve"] {
+    border-color: #b7815b;
+    background: linear-gradient(#ffe5d9 0 65%, #edbe97 66% 74%, #c99367 75% 100%);
+  }
   @keyframes customer-arrive { from { transform: translate(22px, 7px); opacity: 0; } }
   @keyframes order-appear { from { transform: translateY(4px) scale(.96); opacity: 0; } }
   @media (prefers-reduced-motion: reduce) {

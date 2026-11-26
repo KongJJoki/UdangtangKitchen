@@ -254,6 +254,7 @@ function renderCustomers(r){
   const queue=$('customers');
   if(queue.dataset.room!==r.code){queue.replaceChildren();queue.dataset.room=r.code}
   const orders=r.phase==='playing'?r.orders:[];
+  const serving=r.stations.filter(station=>station.t==='serve').sort((a,b)=>a.x-b.x);
   const active=new Set(orders.map(order=>String(order.id)));
   for(const node of queue.children){if(!active.has(node.dataset.order))node.hidden=true}
   for(const node of [...queue.children]){if(node.hidden)node.remove()}
@@ -263,8 +264,10 @@ function renderCustomers(r){
       node=document.createElement('article');
       node.className='customer';
       node.dataset.order=order.id;
-      const free=[0,1,2].find(slot=>![...queue.children].some(customer=>Number(customer.style.gridColumn)===slot+1))??0;
-      node.style.gridColumn=free+1;
+      const slot=serving.findIndex((_,index)=>![...queue.children].some(customer=>Number(customer.dataset.slot)===index));
+      if(slot<0)continue;
+      node.dataset.slot=slot;
+      node.style.left=(serving[slot].x+.5)/12*100+'%';
       node.innerHTML='<div class="customer-order"><strong>'+escapeHTML(order.name)+'</strong><div class="customer-food ticket-body" data-dish="'+dishSprite(order.name)+'">'+dishArt(order)+'<div class="customer-ingredients">'+order.items.map(key=>'<span title="'+escapeHTML(ingredientName(key))+'">'+food(key)+'</span>').join('')+'</div></div><div class="customer-time"><span class="customer-timer">'+orderTimer(order)+'</span><b>+'+(order.points??100)+'점</b></div></div><div class="customer-avatar" data-animal="'+((order.id-1)%3)+'" aria-hidden="true"></div>';
       queue.append(node);
     }
