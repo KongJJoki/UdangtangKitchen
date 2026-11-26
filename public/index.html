@@ -117,28 +117,16 @@ body:has(#lobby:not([style*="display: none"])) .scene-decor { display: none; }
   container-type: inline-size;
 }
 @media (min-width: 800px) and (min-aspect-ratio: 6/5) {
-  /* Extend the painted edges before fading into the wider wall and cloth. */
-  #lobby::before,
-  #lobby::after {
+  /* Blend only the artwork so the form and its focus outlines stay opaque. */
+  #lobby { background: none; }
+  #lobby::before {
     content: "";
     position: absolute;
-    inset-block: 0;
-    width: min(calc(var(--lobby-width) * .13), max(0px, (100vw - var(--lobby-width)) / 2));
-    background: url("/lobby-reference.png") var(--edge) top / var(--lobby-width) 100% no-repeat;
-    transform: scaleX(-1);
-    mask-image: linear-gradient(to var(--edge), transparent 94%, #000 100%);
+    inset: 0;
+    background: url("/lobby-reference.png") center / 100% 100% no-repeat;
+    mask-image: linear-gradient(90deg, transparent, #000 5.5%, #000 95.5%, transparent);
     pointer-events: none;
   }
-  #lobby::before {
-    --edge: left;
-    right: calc(100% - .5px);
-    mask-image:
-      linear-gradient(to left, transparent 94%, #000 100%),
-      linear-gradient(to left, transparent 5%, #000 85%),
-      linear-gradient(#000 7%, transparent 12%);
-    mask-composite: add, intersect;
-  }
-  #lobby::after { --edge: right; left: calc(100% - .5px); }
   main:has(#lobby:not([style*="display: none"]))::before {
     --check: calc(var(--lobby-width) * .026);
     --wave: calc(var(--check) * 6);
