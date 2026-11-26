@@ -25,6 +25,9 @@
 .recipe-ingredients { display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 4px 0; }
 .recipe-ingredients > span { display: inline-flex; align-items: center; gap: 3px; }
 .recipe-ingredients :is(img, svg) { width: 24px; height: 24px; object-fit: contain; }
+.stage-cooking { margin: 0; padding: 10px 16px 10px 38px; background: #fffaf0; border: 1px solid #e2bc7b; border-radius: 12px; }
+.stage-cooking li { padding: 4px 0; }
+.stage-cooking li::marker { color: #aa6a2d; }
 #recipeDialog footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
 #recipeDialog footer p { margin: 0; }
 #recipeDialogClose { padding: 6px 12px; color: #673b1d; background: #ffdf91; border-color: #c89451; font: inherit; }
@@ -547,17 +550,23 @@
   #game #customers {
     display: block;
     grid-area: 1 / 2;
-    padding: 6px 7px 4px;
+    padding: 5px 8px 7px;
     min-width: 0;
-    background: #fff0db;
+    background: #f5cfb7 url("/game-customer-window.png") center / 100% 100% no-repeat;
+    overflow: hidden;
   }
   #game #customerTitle {
-    margin: 0 0 4px;
+    width: fit-content;
+    min-width: 46%;
+    margin: 0 auto 6px;
+    padding: 2px 14px;
     text-align: center;
     color: #643b20;
     font-size: clamp(15px, 2.3svh, 21px);
     border-radius: 20px;
+    border: 1px solid #dba160;
     background: #ffe7a4;
+    box-shadow: 0 2px #ad754451;
   }
   #game #customerQueue {
     display: grid;
@@ -574,11 +583,13 @@
     position: relative;
     display: grid;
     gap: 2px;
-    padding: 2px 3px;
+    justify-items: center;
+    align-content: center;
+    padding: 4px 2px;
     color: #633719;
     background: #fff8e8;
-    border: 2px solid #ad7742;
-    border-radius: 13px;
+    border: 2px solid #84542c;
+    border-radius: 17px;
     box-shadow: 0 2px #99613944;
     animation: order-appear .32s ease-out both;
   }
@@ -589,23 +600,18 @@
     left: calc(50% - 4px);
     width: 8px;
     height: 8px;
-    border-right: 2px solid #ad7742;
-    border-bottom: 2px solid #ad7742;
+    border-right: 2px solid #84542c;
+    border-bottom: 2px solid #84542c;
     background: #fff8e8;
     transform: rotate(45deg);
   }
-  #game .customer-order > strong { text-align: center; font-size: clamp(11px, 1.65svh, 16px); }
-  #game .customer-food { gap: 3px; align-items: center; }
-  #game .customer-food.ticket-body::before { flex: 0 0 clamp(21px, 3.6svh, 36px); }
-  #game .customer-ingredients { display: flex; flex-wrap: wrap; gap: 1px; }
-  #game .customer-ingredients :is(img, svg) { display: block; width: clamp(12px, 2.15svh, 20px); height: auto; }
-  #game .customer-time { display: flex; gap: 4px; align-items: center; font-size: clamp(10px, 1.5svh, 14px); white-space: nowrap; }
-  #game .customer-timer { flex: 1; min-width: 0; }
-  #game .customer-timer .order-timer { margin: 0; height: 8px; }
+  #game .customer-order > strong { text-align: center; line-height: 1.15; font-size: clamp(12px, 1.9svh, 17px); }
+  #game .customer-food { justify-content: center; width: 100%; }
+  #game .customer-food.ticket-body::before { flex: 0 0 clamp(28px, 4.5svh, 44px); }
   #game .customer-avatar {
-    width: clamp(28px, 5.2svh, 49px);
+    width: clamp(38px, 6.9svh, 62px);
     aspect-ratio: 1;
-    margin: 4px auto 0;
+    margin: 5px auto 0;
     background: url("/game-customers.png") 0 50% / 300% auto no-repeat;
     animation: customer-arrive .45s ease-out both;
   }
