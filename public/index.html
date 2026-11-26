@@ -117,21 +117,43 @@ body:has(#lobby:not([style*="display: none"])) .scene-decor { display: none; }
   container-type: inline-size;
 }
 @media (min-width: 800px) and (min-aspect-ratio: 6/5) {
+  /* Extend the painted edges before fading into the wider wall and cloth. */
+  #lobby::before,
+  #lobby::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    width: min(calc(var(--lobby-width) * .13), max(0px, (100vw - var(--lobby-width)) / 2));
+    background: url("/lobby-reference.png") var(--edge) top / var(--lobby-width) 100% no-repeat;
+    transform: scaleX(-1);
+    mask-image: linear-gradient(to var(--edge), transparent 94%, #000 100%);
+    pointer-events: none;
+  }
+  #lobby::before {
+    --edge: left;
+    right: calc(100% - .5px);
+    mask-image:
+      linear-gradient(to left, transparent 94%, #000 100%),
+      linear-gradient(to left, transparent 5%, #000 85%),
+      linear-gradient(#000 7%, transparent 12%);
+    mask-composite: add, intersect;
+  }
+  #lobby::after { --edge: right; left: calc(100% - .5px); }
   main:has(#lobby:not([style*="display: none"]))::before {
     --check: calc(var(--lobby-width) * .026);
-    --wave: calc(var(--check) * 4);
-    --wave-depth: calc(var(--check) * .38);
+    --wave: calc(var(--check) * 6);
+    --wave-depth: calc(var(--check) * .24);
     content: "";
     position: absolute;
     inset-inline: 0;
-    top: calc(var(--lobby-width) * 1123 / 1278);
-    height: calc(var(--lobby-width) * 108 / 1278);
+    top: calc(var(--lobby-width) * 1126 / 1278);
+    bottom: 0;
     pointer-events: none;
     background:
       radial-gradient(ellipse 50% var(--wave-depth) at 50% 0,
         #e6ab4b 97%, transparent 100%) left top / var(--wave) 100% repeat-x,
-      conic-gradient(#fff7d5 25%, #ffe6a0 0 50%, #ffde80 0 75%, #ffe6a0 0)
-        center var(--wave-depth) / calc(var(--check) * 2) calc(var(--check) * 2);
+      conic-gradient(#fff7d4 25%, #ffecb0 0 50%, #ffe08b 0 75%, #ffecb0 0)
+        center calc(var(--check) * .34) / calc(var(--check) * 2) calc(var(--check) * 2);
     mask: radial-gradient(ellipse 50% calc(var(--wave-depth) - 2px) at 50% 0,
       transparent 97%, #000 100%) left top / var(--wave) 100% repeat-x;
   }
